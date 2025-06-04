@@ -1,0 +1,36 @@
+.container {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+  height: 40px;
+  display: flex;
+  align-items: center;
+  min-width: 280px;
+  padding-left: 12px;
+  padding-right: 6px;
+  gap: 8px;
+}
+
+.input {
+  flex-grow: 1;
+  height: 100%;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  background: transparent;
+}
+
+.button {
+  background: none;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
