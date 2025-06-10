@@ -29,6 +29,42 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearchC
     })
   }, [map])
 
+  // 🧠 Add dropdown style for .pac-container
+  useEffect(() => {
+    const style = document.createElement('style')
+    style.innerHTML = `
+      .pac-container {
+        width: 400px !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        margin-top: -1px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+      }
+    `
+    document.head.appendChild(style)
+  }, [])
+
+
+  // 🆕 Manual search handler
+  const handleManualSearch = () => {
+    if (!map || !value.trim()) return
+
+    const service = new window.google.maps.places.PlacesService(map)
+
+    service.findPlaceFromQuery(
+      {
+        query: value,
+        fields: ['geometry'],
+      },
+      (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results && results[0].geometry?.location) {
+          map.panTo(results[0].geometry.location)
+          map.setZoom(15)
+        }
+      }
+    )
+  }
+
   return (
     <div className={styles.container}>
       <input
@@ -37,10 +73,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, onSearchC
         type="text"
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault() // prevent form submission if inside a form
+            handleManualSearch()
+          }
+        }}
         placeholder="Search Google Maps"
         className={styles.input}
       />
-      <button className={styles.button} onClick={onSearchClick}>
+      <button className={styles.button} onClick={handleManualSearch}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="20"
